@@ -1,0 +1,26 @@
+.createButton {
+  padding: 12px;
+  margin-left: 20px;
+  border: 2px solid yellow;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+}
+
+.deleteButton {
+  padding: 4px;
+  margin-left: 5px;
+  border: 2px solid yellow;
+  background: #ecd3a1;
+  background-size: cover;
+  /* fallback for old browsers */
+  background: #43c6ac;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(45deg, #191654, #43c6ac);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(45deg, #191654, #43c6ac);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  color: white;
+  border-radius: 5px;
+}
