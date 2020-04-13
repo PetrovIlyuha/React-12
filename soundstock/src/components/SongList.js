@@ -10,17 +10,12 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { PlayArrow, Save } from "@material-ui/icons";
+import { GET_SONGS } from "../graphql/queries";
+import { useQuery } from "@apollo/react-hooks";
 
 const SongList = () => {
-  let loading = false;
-
-  const song = {
-    title: "Stoned (OTR Remix)",
-    artist: "BLONDAGE",
-    thumbnail:
-      "https://images.genius.com/e0133cf47a74343a8ee8bd4a42e8f29d.1000x1000x1.jpg",
-  };
-
+  const { data, loading, error } = useQuery(GET_SONGS);
+  const classes = useStyles();
   if (loading) {
     return (
       <div
@@ -35,11 +30,12 @@ const SongList = () => {
       </div>
     );
   }
+
+  if (error) return <div>Error fetching songs...</div>;
+
   return (
     <div>
-      {Array.from({ length: 10 }, () => song).map((song, index) => (
-        <Song key={index} song={song} />
-      ))}
+      {data && data.Songs.map((song) => <Song key={song.id} song={song} />)}
     </div>
   );
 };
