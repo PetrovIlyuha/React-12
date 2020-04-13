@@ -7,6 +7,10 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import indigo from "@material-ui/core/colors/indigo";
 import grey from "@material-ui/core/colors/grey";
 
+// Apollo graphql client setup
+import { ApolloProvider } from "@apollo/react-hooks";
+import client from "./graphql/client";
+
 const theme = createMuiTheme({
   pallete: {
     type: "dark",
@@ -16,9 +20,11 @@ const theme = createMuiTheme({
 });
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <CssBaseline />
-    <App />
-  </MuiThemeProvider>,
+  <ApolloProvider client={client}>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </MuiThemeProvider>
+  </ApolloProvider>,
   document.getElementById("root")
 );
