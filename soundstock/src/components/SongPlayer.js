@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import QueuedSongList from "./QueuedSongList";
 import {
   Card,
@@ -9,7 +9,8 @@ import {
   CardMedia,
   makeStyles,
 } from "@material-ui/core";
-import { SkipPrevious, PlayArrow, SkipNext } from "@material-ui/icons";
+import { SkipPrevious, PlayArrow, Pause, SkipNext } from "@material-ui/icons";
+import { SongContext } from "../App";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -51,25 +52,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SongPlayer = () => {
+  const { state, dispatch } = useContext(SongContext);
   const classes = useStyles();
+
+  const handleTogglePlay = () => {
+    dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+  };
   return (
     <>
       <Card variant="outlined" className={classes.container}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography variant="h5" component="h3">
-              Title
+              {state.song.title}
             </Typography>
             <Typography variant="subtitle1" component="p">
-              Artist
+              {state.song.artist}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
             <IconButton>
               <SkipPrevious className={classes.playIcon} />
             </IconButton>
-            <IconButton>
-              <PlayArrow className={classes.playIcon} />
+            <IconButton onClick={handleTogglePlay}>
+              {state.isPlaying ? (
+                <Pause className={classes.playIcon} />
+              ) : (
+                <PlayArrow className={classes.playIcon} />
+              )}
             </IconButton>
             <IconButton>
               <SkipNext className={classes.playIcon} />
@@ -84,10 +94,7 @@ const SongPlayer = () => {
           </div>
           <Slider type="range" min={0} max={1} step={0.01} />
         </div>
-        <CardMedia
-          className={classes.thumbnail}
-          image="https://images.genius.com/e0133cf47a74343a8ee8bd4a42e8f29d.1000x1000x1.jpg"
-        />
+        <CardMedia className={classes.thumbnail} image={state.song.thumbnail} />
       </Card>
       <QueuedSongList />
     </>
