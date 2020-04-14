@@ -11,8 +11,9 @@ import {
 } from "@material-ui/core";
 import { PlayArrow, Save, Pause } from "@material-ui/icons";
 import { GET_SONGS } from "../graphql/subscriptions";
-import { useSubscription } from "@apollo/react-hooks";
+import { useSubscription, useMutation } from "@apollo/react-hooks";
 import { SongContext } from "../App";
+import { ADD_OR_REMOVE_FROM_QUEUE } from "../graphql/mutations";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -70,6 +71,12 @@ function Song({ song }) {
   const [currentSongPlaying, setCurrentSongPlaying] = useState(false);
   const classes = useStyles();
 
+  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
+    onCompleted: (data) => {
+      localStorage.setItem("queue", JSON.stringify(data.addOrRemoveFromQueue));
+    },
+  });
+
   useEffect(() => {
     const isSongPlaying = id === state.song.id && state.isPlaying;
     setCurrentSongPlaying(isSongPlaying);
@@ -80,6 +87,11 @@ function Song({ song }) {
     dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
   };
 
+  const handleAddOrRemoveFromQueue = () => {
+    addOrRemoveFromQueue({
+      variables: { input: { ...song, __typename: "Song" } },
+    });
+  };
   return (
     <Card className={classes.container}>
       <div className={classes.songInfoContainer}>
@@ -106,7 +118,11 @@ function Song({ song }) {
                 <PlayArrow style={{ color: "yellow" }} />
               )}
             </IconButton>
-            <IconButton size="small" color="secondary">
+            <IconButton
+              onClick={handleAddOrRemoveFromQueue}
+              size="small"
+              color="secondary"
+            >
               <Save />
             </IconButton>
           </CardActions>
