@@ -1,15 +1,31 @@
-import React from "react";
+import React, { createContext, useContext, useReducer } from "react";
 import Header from "./components/Header";
 import AddSong from "./components/AddSong";
 import SongList from "./components/SongList";
 import SongPlayer from "./components/SongPlayer";
 import { Grid, useMediaQuery, Hidden } from "@material-ui/core";
 
+import songReducer from "./reducer";
+
+export const SongContext = createContext({
+  song: {
+    id: "b2165d92-0271-439f-b60c-e43a054d607f",
+    title: "With Ü",
+    artist: "LIHO",
+    thumbnail:
+      "https://i1.sndcdn.com/artworks-000203224665-ryt3pm-t500x500.jpg",
+    url: "https://soundcloud.com/itsliho/with-u",
+    duration: 192.121,
+  },
+  isPlaying: false,
+});
 function App() {
+  const initialSongState = useContext(SongContext);
   const greaterThanMedium = useMediaQuery("(min-width: 600px)");
 
+  const [state, dispatch] = useReducer(songReducer, initialSongState);
   return (
-    <>
+    <SongContext.Provider value={{ state, dispatch }}>
       <Hidden only="xs">
         <Header />
       </Hidden>
@@ -57,7 +73,7 @@ function App() {
           <SongPlayer />
         </Grid>
       </Grid>
-    </>
+    </SongContext.Provider>
   );
 }
 
