@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   CircularProgress,
   Card,
@@ -9,9 +9,32 @@ import {
   IconButton,
   makeStyles,
 } from "@material-ui/core";
-import { PlayArrow, Save } from "@material-ui/icons";
+import { PlayArrow, Save, Pause } from "@material-ui/icons";
 import { GET_SONGS } from "../graphql/subscriptions";
 import { useSubscription } from "@apollo/react-hooks";
+import { SongContext } from "../App";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: "20px",
+    backgroundColor: "#394359",
+    color: "#FAF4D0",
+  },
+  songInfoContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  songInfo: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  thumbnail: {
+    objectFit: "cover",
+    width: 160,
+    height: 140,
+  },
+}));
 
 const SongList = () => {
   const { data, loading, error } = useSubscription(GET_SONGS);
@@ -40,31 +63,23 @@ const SongList = () => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    marginTop: "20px",
-    backgroundColor: "#394359",
-    color: "#FAF4D0",
-  },
-  songInfoContainer: {
-    display: "flex",
-    alignItems: "center",
-  },
-  songInfo: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  thumbnail: {
-    objectFit: "cover",
-    width: 160,
-    height: 140,
-  },
-}));
-
 function Song({ song }) {
+  const { id } = song;
   const { title, artist, thumbnail } = song;
+  const { state, dispatch } = useContext(SongContext);
+  const [currentSongPlaying, setCurrentSongPlaying] = useState(false);
   const classes = useStyles();
+
+  useEffect(() => {
+    const isSongPlaying = id === state.song.id && state.isPlaying;
+    setCurrentSongPlaying(isSongPlaying);
+  }, [id, state.song.id, state.isPlaying]);
+
+  const handleTogglePlay = () => {
+    dispatch({ type: "SET_SONG", payload: { song } });
+    dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+  };
+
   return (
     <Card className={classes.container}>
       <div className={classes.songInfoContainer}>
@@ -84,8 +99,12 @@ function Song({ song }) {
             </Typography>
           </CardContent>
           <CardActions>
-            <IconButton size="small" color="primary">
-              <PlayArrow style={{ color: "yellow" }} />
+            <IconButton onClick={handleTogglePlay} size="small" color="primary">
+              {currentSongPlaying ? (
+                <Pause style={{ color: "yellow" }} />
+              ) : (
+                <PlayArrow style={{ color: "yellow" }} />
+              )}
             </IconButton>
             <IconButton size="small" color="secondary">
               <Save />
