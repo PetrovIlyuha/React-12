@@ -1,9 +1,8 @@
 import React from "react";
 import Logo from "../Logo";
 import { AppBar, Toolbar, Typography, makeStyles } from "@material-ui/core";
-import { useTheme } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   title: {
     marginLeft: theme.spacing(2),
   },
@@ -11,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles();
-  const theme = useTheme();
   return (
     <AppBar
       style={{
