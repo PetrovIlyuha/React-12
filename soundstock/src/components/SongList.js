@@ -15,7 +15,7 @@ import { useSubscription, useMutation } from "@apollo/react-hooks";
 import { SongContext } from "../App";
 import { ADD_OR_REMOVE_FROM_QUEUE } from "../graphql/mutations";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   container: {
     marginTop: "20px",
     backgroundColor: "#394359",
@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SongList = () => {
   const { data, loading, error } = useSubscription(GET_SONGS);
-  const classes = useStyles();
   if (loading) {
     return (
       <div
@@ -59,7 +58,7 @@ const SongList = () => {
 
   return (
     <div>
-      {data && data.Songs.map((song) => <Song key={song.id} song={song} />)}
+      {data && data.Songs.map(song => <Song key={song.id} song={song} />)}
     </div>
   );
 };
@@ -72,7 +71,7 @@ function Song({ song }) {
   const classes = useStyles();
 
   const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
-    onCompleted: (data) => {
+    onCompleted: data => {
       localStorage.setItem("queue", JSON.stringify(data.addOrRemoveFromQueue));
     },
   });
