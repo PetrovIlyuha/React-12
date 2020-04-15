@@ -34,12 +34,6 @@ const useStyles = makeStyles({
 });
 
 const QueuedSongList = ({ queue }) => {
-  const song = {
-    title: "Stoned (OTR Remix)",
-    artist: "BLONDAGE",
-    thumbnail:
-      "https://images.genius.com/e0133cf47a74343a8ee8bd4a42e8f29d.1000x1000x1.jpg",
-  };
   const greaterThanMedium = useMediaQuery("(min-width: 600px)");
   return (
     greaterThanMedium && (
@@ -59,7 +53,7 @@ function QueuedSong({ song }) {
   const { thumbnail, artist, title } = song;
   const classes = useStyles();
   const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
-    onCompleted: (data) => {
+    onCompleted: data => {
       localStorage.setItem("queue", JSON.stringify(data.addOrRemoveFromQueue));
     },
   });
