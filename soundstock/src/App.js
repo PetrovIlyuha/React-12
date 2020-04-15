@@ -19,6 +19,7 @@ export const SongContext = createContext({
   },
   isPlaying: false,
 });
+
 function App() {
   const initialSongState = useContext(SongContext);
   const greaterThanMedium = useMediaQuery("(min-width: 600px)");
