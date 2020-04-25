@@ -10,7 +10,11 @@ function NotFoundPage() {
         Sorry, this page isn't available
       </Typography>
       <Typography variant="h6" align="center" paragraph>
-        The link you followed may be broken or was removed 😞
+        The link you followed may be broken or was removed{" "}
+        <span role="img" aria-label="sad">
+          {" "}
+          😞
+        </span>
         <Link to="/">
           {" "}
           <Typography color="primary" component="span" align="center">

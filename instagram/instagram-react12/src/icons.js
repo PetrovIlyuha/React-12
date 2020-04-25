@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 
-export const LogoLoadingIcon = props => (
+export const LogoLoadingIcon = (props) => (
   <svg
     width={50}
     height={50}
@@ -10,7 +10,7 @@ export const LogoLoadingIcon = props => (
       position: "absolute",
       top: "50%",
       left: "50%",
-      margin: "-25px 0 0 -25px"
+      margin: "-25px 0 0 -25px",
     }}
     fill="#c7c7c7"
     {...props}
@@ -19,7 +19,7 @@ export const LogoLoadingIcon = props => (
   </svg>
 );
 
-export const SaveIcon = props => (
+export const SaveIcon = (props) => (
   <svg
     aria-label="Save"
     className="_8-yf5"
@@ -33,7 +33,7 @@ export const SaveIcon = props => (
   </svg>
 );
 
-export const CommentIcon = props => (
+export const CommentIcon = (props) => (
   <svg
     aria-label="Comment"
     className="_8-yf5"
@@ -51,7 +51,7 @@ export const CommentIcon = props => (
   </svg>
 );
 
-export const ExploreActiveIcon = props => (
+export const ExploreActiveIcon = (props) => (
   <svg
     aria-label="Find People"
     className="_8-yf5"
@@ -69,7 +69,7 @@ export const ExploreActiveIcon = props => (
   </svg>
 );
 
-export const ExploreIcon = props => (
+export const ExploreIcon = (props) => (
   <svg
     aria-label="Find People"
     className="_8-yf5"
@@ -87,7 +87,7 @@ export const ExploreIcon = props => (
   </svg>
 );
 
-export const HomeActiveIcon = props => (
+export const HomeActiveIcon = (props) => (
   <svg
     aria-label="Home"
     className="_8-yf5"
@@ -101,7 +101,7 @@ export const HomeActiveIcon = props => (
   </svg>
 );
 
-export const HomeIcon = props => (
+export const HomeIcon = (props) => (
   <svg
     aria-label="Home"
     className="_8-yf5"
@@ -115,23 +115,25 @@ export const HomeIcon = props => (
   </svg>
 );
 
-export const LikeIcon = props => (
-  <svg
-    aria-label="Like"
-    className="_8-yf5"
-    fill="#262626"
-    height={24}
-    viewBox="0 0 48 48"
-    width={24}
-    {...props}
-  >
-    <path
-      clipRule="evenodd"
-      d="M34.3 3.5C27.2 3.5 24 8.8 24 8.8s-3.2-5.3-10.3-5.3C6.4 3.5.5 9.9.5 17.8s6.1 12.4 12.2 17.8c9.2 8.2 9.8 8.9 11.3 8.9s2.1-.7 11.3-8.9c6.2-5.5 12.2-10 12.2-17.8 0-7.9-5.9-14.3-13.2-14.3zm-1 29.8c-5.4 4.8-8.3 7.5-9.3 8.1-1-.7-4.6-3.9-9.3-8.1-5.5-4.9-11.2-9-11.2-15.6 0-6.2 4.6-11.3 10.2-11.3 4.1 0 6.3 2 7.9 4.2 3.6 5.1 1.2 5.1 4.8 0 1.6-2.2 3.8-4.2 7.9-4.2 5.6 0 10.2 5.1 10.2 11.3 0 6.7-5.7 10.8-11.2 15.6z"
-      fillRule="evenodd"
-    />
-  </svg>
-);
+export const LikeIcon = (props) => {
+  return (
+    <svg
+      aria-label="Like"
+      className="_8-yf5"
+      fill="#262626"
+      height={24}
+      viewBox="0 0 48 48"
+      width={24}
+      {...props}
+    >
+      <path
+        clipRule="evenodd"
+        d="M34.3 3.5C27.2 3.5 24 8.8 24 8.8s-3.2-5.3-10.3-5.3C6.4 3.5.5 9.9.5 17.8s6.1 12.4 12.2 17.8c9.2 8.2 9.8 8.9 11.3 8.9s2.1-.7 11.3-8.9c6.2-5.5 12.2-10 12.2-17.8 0-7.9-5.9-14.3-13.2-14.3zm-1 29.8c-5.4 4.8-8.3 7.5-9.3 8.1-1-.7-4.6-3.9-9.3-8.1-5.5-4.9-11.2-9-11.2-15.6 0-6.2 4.6-11.3 10.2-11.3 4.1 0 6.3 2 7.9 4.2 3.6 5.1 1.2 5.1 4.8 0 1.6-2.2 3.8-4.2 7.9-4.2 5.6 0 10.2 5.1 10.2 11.3 0 6.7-5.7 10.8-11.2 15.6z"
+        fillRule="evenodd"
+      />
+    </svg>
+  );
+};
 
 const useLoadingLargeStyles = makeStyles({
   container: {
@@ -141,22 +143,22 @@ const useLoadingLargeStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   loading: {
-    animation: "$spinner-spin12 1.2s steps(12) infinite"
+    animation: "$spinner-spin12 1.2s steps(12) infinite",
   },
   "@keyframes spinner-spin12": {
     "0%": {
-      transform: "rotate(0deg)"
+      transform: "rotate(0deg)",
     },
     to: {
-      transform: "rotate(360deg)"
-    }
-  }
+      transform: "rotate(360deg)",
+    },
+  },
 });
 
-export const LoadingLargeIcon = props => {
+export const LoadingLargeIcon = (props) => {
   const classes = useLoadingLargeStyles();
 
   return (
@@ -307,22 +309,22 @@ const useLoadingStyles = makeStyles({
   container: {
     height: 18,
     width: 18,
-    margin: "0 auto"
+    margin: "0 auto",
   },
   loadingSvg: {
-    animation: "$IGCoreSpinnerSpin8 .8s steps(8) infinite"
+    animation: "$IGCoreSpinnerSpin8 .8s steps(8) infinite",
   },
   "@keyframes IGCoreSpinnerSpin8": {
     "0%": {
-      transform: "rotate(180deg)"
+      transform: "rotate(180deg)",
     },
     to: {
-      transform: "rotate(540deg)"
-    }
-  }
+      transform: "rotate(540deg)",
+    },
+  },
 });
 
-export const LoadingIcon = props => {
+export const LoadingIcon = (props) => {
   const classes = useLoadingStyles();
 
   return (
@@ -427,7 +429,7 @@ export const LoadingIcon = props => {
   );
 };
 
-export const MoreIcon = props => (
+export const MoreIcon = (props) => (
   <svg
     aria-label="More options"
     className="_8-yf5"
@@ -443,7 +445,7 @@ export const MoreIcon = props => (
   </svg>
 );
 
-export const RemoveIcon = props => (
+export const RemoveIcon = (props) => (
   <svg
     aria-label="Remove"
     className="_8-yf5"
@@ -457,7 +459,7 @@ export const RemoveIcon = props => (
   </svg>
 );
 
-export const ShareIcon = props => (
+export const ShareIcon = (props) => (
   <svg
     aria-label="Share Post"
     className="_8-yf5"
@@ -471,25 +473,27 @@ export const ShareIcon = props => (
   </svg>
 );
 
-export const UnlikeIcon = props => (
-  <svg
-    aria-label="Unlike"
-    className="_8-yf5"
-    fill="#ed4956"
-    height={24}
-    viewBox="0 0 48 48"
-    width={24}
-    {...props}
-  >
-    <path
-      clipRule="evenodd"
-      d="M35.3 35.6c-9.2 8.2-9.8 8.9-11.3 8.9s-2.1-.7-11.3-8.9C6.5 30.1.5 25.6.5 17.8.5 9.9 6.4 3.5 13.7 3.5 20.8 3.5 24 8.8 24 8.8s3.2-5.3 10.3-5.3c7.3 0 13.2 6.4 13.2 14.3 0 7.8-6.1 12.3-12.2 17.8z"
-      fillRule="evenodd"
-    />
-  </svg>
-);
+export const UnlikeIcon = (props) => {
+  return (
+    <svg
+      aria-label="Unlike"
+      className="_8-yf5"
+      fill="#ed4956"
+      height={24}
+      viewBox="0 0 48 48"
+      width={24}
+      {...props}
+    >
+      <path
+        clipRule="evenodd"
+        d="M35.3 35.6c-9.2 8.2-9.8 8.9-11.3 8.9s-2.1-.7-11.3-8.9C6.5 30.1.5 25.6.5 17.8.5 9.9 6.4 3.5 13.7 3.5 20.8 3.5 24 8.8 24 8.8s3.2-5.3 10.3-5.3c7.3 0 13.2 6.4 13.2 14.3 0 7.8-6.1 12.3-12.2 17.8z"
+        fillRule="evenodd"
+      />
+    </svg>
+  );
+};
 
-export const GearIcon = props => (
+export const GearIcon = (props) => (
   <svg
     aria-label="Options"
     className="_8-yf5"
@@ -507,7 +511,7 @@ export const GearIcon = props => (
   </svg>
 );
 
-export const LikeActiveIcon = props => (
+export const LikeActiveIcon = (props) => (
   <svg
     aria-label="Activity Feed"
     className="_8-yf5"
@@ -525,7 +529,7 @@ export const LikeActiveIcon = props => (
   </svg>
 );
 
-export const CloseIcon = props => (
+export const CloseIcon = (props) => (
   <svg
     aria-label="Close"
     className="_8-yf5"
@@ -543,7 +547,7 @@ export const CloseIcon = props => (
   </svg>
 );
 
-export const AddIcon = props => (
+export const AddIcon = (props) => (
   <svg
     aria-label="New Post"
     className="_8-yf5"
@@ -559,7 +563,7 @@ export const AddIcon = props => (
   </svg>
 );
 
-export const GridIcon = props => (
+export const GridIcon = (props) => (
   <svg
     aria-label="Posts"
     className="_8-yf5"
