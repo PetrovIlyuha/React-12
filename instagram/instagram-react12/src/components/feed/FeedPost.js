@@ -18,19 +18,30 @@ import {
   Divider,
   TextField,
 } from "@material-ui/core";
+import FollowSuggestions from "../shared/FollowSuggestions";
 import HTMLEllipsis from "react-lines-ellipsis/lib/html";
+import OptionsDialog from "../shared/OptionsDialog";
 
-function FeedPost({ post }) {
+function FeedPost({ post, index }) {
   const classes = useFeedPostStyles();
   const [showCaption, setShowCaption] = useState(false);
+  const [showOptionsDialog, setOptionsDialog] = useState(false);
   const { media, id, likes, user, caption, comments } = post;
+  const showFollowSuggestions = index === 1;
   return (
     <React.Fragment>
-      <article className={classes.article}>
+      <article
+        className={classes.article}
+        style={{ marginBottom: showFollowSuggestions && 30 }}
+      >
         {/* Feed Post Header */}
         <div className={classes.postHeader}>
           <UserCard user={user} />
-          <MoreIcon className={classes.MoreIcon} />
+          <MoreIcon
+            className={classes.MoreIcon}
+            style={{ cursor: "pointer" }}
+            onClick={() => setOptionsDialog(true)}
+          />
         </div>
         {/* Feed Post Image */}
         <div>
@@ -118,6 +129,10 @@ function FeedPost({ post }) {
           <Comment />
         </Hidden>
       </article>
+      {showFollowSuggestions && <FollowSuggestions />}
+      {showOptionsDialog && (
+        <OptionsDialog onClose={() => setOptionsDialog(false)} />
+      )}
     </React.Fragment>
   );
 }
