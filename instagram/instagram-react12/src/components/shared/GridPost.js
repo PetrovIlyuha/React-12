@@ -1,12 +1,20 @@
 import React from "react";
 import { useGridPostStyles } from "../../styles";
 import { Typography } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 function GridPost({ post }) {
+  const history = useHistory();
   const classes = useGridPostStyles();
 
+  function handleOpenPostModal() {
+    history.push({
+      pathname: `/p/${post.id}`,
+      state: { modal: true },
+    });
+  }
   return (
-    <div className={classes.gridPostContainer}>
+    <div onClick={handleOpenPostModal} className={classes.gridPostContainer}>
       <div className={classes.gridPostOverlay}>
         <div className={classes.gridPostInfo}>
           <span className={classes.likes} />
