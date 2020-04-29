@@ -25,7 +25,7 @@ function GridPost({ post }) {
           <Typography>{post.comments.length}</Typography>
         </div>
       </div>
-      <img src={post.media} alt="Post cover image" className={classes.image} />
+      <img src={post.media} alt="Post cover" className={classes.image} />
     </div>
   );
 }
