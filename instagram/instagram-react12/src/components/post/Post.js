@@ -19,12 +19,20 @@ import {
   TextField,
 } from "@material-ui/core";
 import OptionsDialog from "../shared/OptionsDialog";
+import PostSkeleton from "../post/PostSkeleton";
 import { defaultPost } from "../../data";
 
 function Post() {
   const classes = usePostStyles();
   const [showOptionsDialog, setOptionsDialog] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { media, id, likes, user, caption, comments } = defaultPost;
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 2000);
+
+  if (loading) return <PostSkeleton />;
 
   return (
     <div className={classes.postContainer}>
@@ -39,9 +47,11 @@ function Post() {
           />
         </div>
         {/* Post Image */}
-        <div className={classes.postImage}>
-          <img src={media} alt="Post Media" className={classes.image} />
-        </div>
+        <Link to={`/p/${id}`}>
+          <div className={classes.postImage}>
+            <img src={media} alt="Post Media" className={classes.image} />
+          </div>
+        </Link>
         {/* Post buttons */}
         <div className={classes.postButtonsWrapper}>
           <div className={classes.postButtons}>
