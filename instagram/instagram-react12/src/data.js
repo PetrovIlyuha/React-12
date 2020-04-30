@@ -67,6 +67,7 @@ export const defaultCurrentUser = {
   profile_image:
     "http://latitudes-sample.com/wp-content/uploads/2016/03/Miniclip-8-Ball-Pool-Avatar-8-300x300.png",
   email: "me@gmail.com",
+  website: "softclubplus.com",
   bio: "This is my bio",
   phone_number: "555-555-5555",
   posts: Array.from({ length: 10 }, () => getDefaultPost()),
