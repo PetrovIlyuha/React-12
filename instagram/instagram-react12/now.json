@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "instagram",  
+  "name": "instagram",
   "builds": [
     {
       "src": "package.json",
