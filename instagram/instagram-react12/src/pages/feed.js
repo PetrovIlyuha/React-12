@@ -22,8 +22,8 @@ function FeedPage() {
         <div>
           {Array.from({ length: 5 }, () => getDefaultPost()).map(
             (post, index) => (
-              <React.Suspense fallback={<FeedPostSkeleton />}>
-                <FeedPost index={index} key={post.id} post={post} />
+              <React.Suspense key={index} fallback={<FeedPostSkeleton />}>
+                <FeedPost index={index} post={post} />
               </React.Suspense>
             )
           )}

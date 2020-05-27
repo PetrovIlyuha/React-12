@@ -11,7 +11,7 @@ function ProfileTabs({ user, isOwner }) {
   return (
     <>
       <section className={classes.section}>
-        <Hidden sxDown>
+        <Hidden xsDown>
           <Divider />
         </Hidden>
         <Hidden xsDown>
@@ -85,23 +85,24 @@ function ProfilePosts({ user, isOwner }) {
     return (
       <section className={classes.profilePostsSection}>
         <div className={classes.noContent}>
-          <div className={classes.uploadPhotoIcon}>
-            <Typography variant="h4">
-              {isOwner ? "Upload a photo" : "No Photos"}
-            </Typography>
-          </div>
+          <div className={classes.uploadPhotoIcon}></div>
+          <Typography variant="h4">
+            {isOwner ? "Upload a photo" : "No Photos"}
+          </Typography>
         </div>
       </section>
     );
   }
   return (
-    <acticle className={classes.article}>
-      <div className={classes.postContainer}>
-        {user.posts.map((post) => (
-          <GridPost key={post.id} post={post} />
-        ))}
+    <>
+      <div className={classes.article}>
+        <div className={classes.postContainer}>
+          {user.posts.map((post) => (
+            <GridPost key={post.id} post={post} />
+          ))}
+        </div>
       </div>
-    </acticle>
+    </>
   );
 }
 
