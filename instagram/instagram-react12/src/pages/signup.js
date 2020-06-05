@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSignUpPageStyles } from "../styles";
 import SEO from "../components/shared/Seo";
-import { LoginWithFacebook } from "./login";
+import { LoginWithGoogle } from "./login";
 import {
   Card,
   TextField,
@@ -32,7 +32,9 @@ function SignUpPage() {
     try {
       setError("");
       await signUpWithEmailAndPassword(data);
-      history.push("/");
+      setTimeout(() => {
+        history.push("/");
+      }, 0);
     } catch (error) {
       console.error("Error signing you up", error);
       handleError(error);
@@ -79,11 +81,7 @@ function SignUpPage() {
             <Typography className={classes.cardHeaderSubHeader}>
               Sign Up to see photos and videos from your friends
             </Typography>
-            <LoginWithFacebook
-              color="primary"
-              iconColor="white"
-              variant="contained"
-            />
+            <LoginWithGoogle color="primary" variant="contained" />
             <div className={classes.orContainer}>
               <div className={classes.orLine} />
               <div>
