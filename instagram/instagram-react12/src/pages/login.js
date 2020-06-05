@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { useLoginPageStyles } from "../styles";
-import FacebookIconBlue from "../images/facebook-icon-blue.svg";
+import GoogleSignInIcon from "../images/google-icon.png";
 import FacebookIconWhite from "../images/facebook-icon-white.png";
 
 import SEO from "../components/shared/Seo";
@@ -10,12 +10,63 @@ import {
   TextField,
   Button,
   Typography,
+  InputAdornment,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import isEmail from "validator/lib/isEmail";
+import { AuthContext } from "../auth";
+import { useApolloClient } from "@apollo/react-hooks";
+import { GET_USER_EMAIL } from "../graphql/queries";
+import { AuthError } from "./signup";
 
 function LoginPage() {
   const classes = useLoginPageStyles();
+  const { register, handleSubmit, watch, formState } = useForm({
+    mode: "onBlur",
+  });
+  const { logInWithEmailAndPassword } = useContext(AuthContext);
+  const [error, setError] = useState("");
+  const [showPassword, setPasswordVisibility] = useState(false);
+  const passwordEntered = Boolean(watch("password"));
+  const history = useHistory();
+  const client = useApolloClient();
 
+  const onSubmit = async ({ input, password }) => {
+    try {
+      setError("");
+      if (!isEmail(input)) {
+        input = await getUserEmail(input);
+      }
+      await logInWithEmailAndPassword(input, password);
+      setTimeout(() => {
+        history.push("/");
+      }, 0);
+    } catch (error) {
+      console.error("Error signing in", error);
+      handleError(error);
+    }
+  };
+
+  const handleError = (error) => {
+    if (error.code.includes("auth")) {
+      setError(error.message);
+    }
+  };
+
+  async function getUserEmail(input) {
+    const variables = { input };
+    const response = await client.query({
+      query: GET_USER_EMAIL,
+      variables,
+    });
+    const userEmail = response.data.users[0]?.email || "no@email.com";
+    return userEmail;
+  }
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility((prev) => !prev);
+  };
   return (
     <>
       <SEO title="Login" />
@@ -23,25 +74,45 @@ function LoginPage() {
         <article>
           <Card className={classes.card}>
             <CardHeader className={classes.cardHeader} />
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <TextField
+                name="input"
+                inputRef={register({
+                  required: true,
+                  minLength: 5,
+                })}
                 fullWidth
                 variant="filled"
-                label="Username"
+                label="Username, email or phone"
                 margin="dense"
                 className={classes.textField}
                 autoComplete="username"
               />
               <TextField
+                name="password"
                 fullWidth
+                inputRef={register({
+                  required: true,
+                  minLenght: 6,
+                })}
+                InputProps={{
+                  endAdornment: passwordEntered && (
+                    <InputAdornment>
+                      <Button onClick={togglePasswordVisibility}>
+                        {showPassword ? "Hide" : "Show"}
+                      </Button>
+                    </InputAdornment>
+                  ),
+                }}
                 variant="filled"
                 label="Password"
                 margin="dense"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className={classes.textField}
                 autoComplete="current-password"
               />
               <Button
+                disabled={!formState.isValid || formState.isSubmitting}
                 variant="contained"
                 fullWidth
                 color="primary"
@@ -60,7 +131,8 @@ function LoginPage() {
               </div>
               <div className={classes.orLine} />
             </div>
-            <LoginWithFacebook color="secondary" iconColor="blue" />
+            <LoginWithGoogle color="secondary" iconColor="blue" />
+            <AuthError error={error} />
             <Button fullWidth color="secondary">
               <Typography variant="caption">Forgot password?</Typography>
             </Button>
@@ -81,19 +153,39 @@ function LoginPage() {
   );
 }
 
-export const LoginWithFacebook = ({ color, iconColor, variant }) => {
+export const LoginWithGoogle = ({ color, variant }) => {
   const classes = useLoginPageStyles();
-  const facebookIcon =
-    iconColor === "blue" ? FacebookIconBlue : FacebookIconWhite;
+  const { logInWithGoogle } = useContext(AuthContext);
+  const [error, setError] = useState("");
+  const history = useHistory();
+  const handleLoginWithGoogle = async () => {
+    try {
+      await logInWithGoogle();
+      setTimeout(() => {
+        history.push("/");
+      }, 0);
+    } catch (err) {
+      console.error(`Error on sign in with Google : ${err}`);
+      setError(error.message);
+    }
+  };
   return (
-    <Button fullWidth color={color} variant={variant}>
-      <img
-        src={facebookIcon}
-        alt="Facebook icon"
-        className={classes.facebookIcon}
-      />
-      Log In With Facebook
-    </Button>
+    <>
+      <Button
+        onClick={handleLoginWithGoogle}
+        fullWidth
+        color={color}
+        variant={variant}
+      >
+        <img
+          src={GoogleSignInIcon}
+          alt="Facebook icon"
+          className={classes.facebookIcon}
+        />
+        Log In With Google
+      </Button>
+      <AuthError error={error} />
+    </>
   );
 };
 export default LoginPage;
