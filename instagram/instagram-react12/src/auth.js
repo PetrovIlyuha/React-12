@@ -71,6 +71,7 @@ function AuthProvider({ children }) {
         phoneNumber: "",
         profileImage: photoURL,
       };
+      await createUser({ variables });
     }
   }
 
@@ -106,6 +107,11 @@ function AuthProvider({ children }) {
     setAuthState({ status: "out" });
   }
 
+  async function updateEmail(email) {
+    await authState.user.updateEmail(email);
+    console.log(authState.user);
+  }
+
   if (authState.status === "loading") {
     return null;
   } else {
@@ -117,6 +123,7 @@ function AuthProvider({ children }) {
           signUpWithEmailAndPassword,
           logInWithEmailAndPassword,
           signOut,
+          updateEmail,
         }}
       >
         {children}
