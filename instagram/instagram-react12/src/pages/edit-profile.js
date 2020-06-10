@@ -19,13 +19,14 @@ import ProfilePicture from "../components/shared/ProfilePicture";
 import { UserContext } from "../App";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { GET_EDIT_USER_PROFILE } from "../graphql/queries";
-import { EDIT_USER } from "../graphql/mutations";
+import { EDIT_USER, EDIT_USER_AVATAR } from "../graphql/mutations";
 import LoadingScreen from "../components/shared/LoadingScreen";
 import { useForm } from "react-hook-form";
 import isURL from "validator/lib/isURL";
 import isEmail from "validator/lib/isEmail";
 import isMobilePhone from "validator/lib/isMobilePhone";
 import { AuthContext } from "../auth";
+import handleImageUpload from "../utils/handleImageUpload";
 
 function EditProfilePage({ history }) {
   const { currentUserId } = React.useContext(UserContext);
@@ -147,8 +148,10 @@ function EditUserInfo({ user }) {
   const { register, handleSubmit } = useForm({ mode: "onBlur" });
   const { updateEmail } = React.useContext(AuthContext);
   const [editUser] = useMutation(EDIT_USER);
+  const [editUserAvatar] = useMutation(EDIT_USER_AVATAR);
   const [error, setError] = useState(DEFAULT_ERROR);
   const [open, setOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState(user.profile_image);
 
   const onSubmit = async (data) => {
     try {
@@ -170,21 +173,38 @@ function EditUserInfo({ user }) {
       setError({ type: "email", message: "Invalid email" });
     }
   };
+
+  const handleUpdateProfilePic = async (event) => {
+    const url = await handleImageUpload(event.target.files[0]);
+    const variables = { id: user.id, profileImage: url };
+    await editUserAvatar({ variables });
+    setProfileImage(url);
+  };
+
   return (
     <section className={classes.container}>
       <div className={classes.pictureSectionItem}>
-        <ProfilePicture size={38} user={user} image={user.profile_image} />
+        <ProfilePicture size={38} user={user} image={profileImage} />
         <div className={classes.justifySelfStart}>
           <Typography className={classes.typography}>
             {user.username}
           </Typography>
-          <Typography
-            color="primary"
-            variant="body2"
-            className={classes.typographyChangePic}
-          >
-            Change Profile Photo
-          </Typography>
+          <input
+            accept="image/*"
+            id="image"
+            type="file"
+            style={{ display: "none" }}
+            onChange={handleUpdateProfilePic}
+          />
+          <label htmlFor="image">
+            <Typography
+              color="primary"
+              variant="body2"
+              className={classes.typographyChangePic}
+            >
+              Change Profile Photo
+            </Typography>
+          </label>
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
