@@ -25,10 +25,11 @@ import {
 import NotificationTooltip from "../notification/NotificationTooltip";
 import NotificationList from "../notification/NotificationList";
 import { useNProgress } from "@tanem/react-nprogress";
-import { useLazyQuery, useQuery } from "@apollo/react-hooks";
+import { useLazyQuery } from "@apollo/react-hooks";
 import { SEARCH_USERS } from "../../graphql/queries";
 import { UserContext } from "../../App";
 import AddPostDialog from "../post/AddPostDialog";
+import { isAfter } from "date-fns/esm";
 
 function Navbar({ minimalNavbar }) {
   const classes = useNavbarStyles();
@@ -77,10 +78,7 @@ function Search({ history }) {
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [
-    searchUsers,
-    { called, loading: searchUsersLoading, data },
-  ] = useLazyQuery(SEARCH_USERS);
+  const [searchUsers, { data }] = useLazyQuery(SEARCH_USERS);
 
   const hasResults = Boolean(query) && results.length > 0;
 
@@ -154,10 +152,14 @@ function Search({ history }) {
 }
 
 function Links({ path }) {
-  const { me } = React.useContext(UserContext);
+  const { me, currentUserId } = React.useContext(UserContext);
+  const newNotifications = me.notifications.filter(({ created_at }) =>
+    isAfter(new Date(created_at), new Date(me.last_checked))
+  );
+  const hasNotifications = newNotifications.length > 0;
   const classes = useNavbarStyles();
   const [showList, setShowList] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(true);
+  const [showTooltip, setShowTooltip] = useState(hasNotifications);
   const [media, setMedia] = useState(null);
   const [showAddPostDialog, setAddPostDialog] = useState(false);
   const inputRef = useRef();
@@ -194,7 +196,13 @@ function Links({ path }) {
 
   return (
     <div className={classes.linksContainer}>
-      {showList && <NotificationList handleHideList={handleHideList} />}
+      {showList && (
+        <NotificationList
+          notifications={me.notifications}
+          handleHideList={handleHideList}
+          currentUserId={currentUserId}
+        />
+      )}
       <div className={classes.linksWrapper}>
         {showAddPostDialog && (
           <AddPostDialog media={media} handleClose={handleClose} />
@@ -217,9 +225,12 @@ function Links({ path }) {
           open={showTooltip}
           onOpen={handleHideTooltip}
           TransitionComponent={Zoom}
-          title={<NotificationTooltip />}
+          title={<NotificationTooltip notifications={newNotifications} />}
         >
-          <div className={classes.notifications} onClick={handleToggleList}>
+          <div
+            className={hasNotifications ? classes.notifications : ""}
+            onClick={handleToggleList}
+          >
             {showList ? <LikeActiveIcon /> : <LikeIcon />}
           </div>
         </RedTooltip>
