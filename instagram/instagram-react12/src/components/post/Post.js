@@ -31,6 +31,7 @@ import {
   UNSAVE_POST,
   CREATE_COMMENT,
 } from "../../graphql/mutations";
+import { formatDateToNowShort, formatPostDate } from "../../utils/formatDate";
 
 function Post({ postId }) {
   const classes = usePostStyles();
@@ -38,7 +39,8 @@ function Post({ postId }) {
   const variables = { postId };
   const { data, loading } = useSubscription(GET_POST, { variables });
 
-  if (loading) return <PostSkeleton />;
+  if (loading || !data) return <PostSkeleton />;
+
   const {
     media,
     id,
@@ -51,6 +53,7 @@ function Post({ postId }) {
     location,
     created_at,
   } = data.posts_by_pk;
+
   const likesCount = likes_aggregate.aggregate.count;
   return (
     <div className={classes.postContainer}>
@@ -106,7 +109,7 @@ function Post({ postId }) {
             ))}
           </div>
           <Typography color="textSecondary" className={classes.datePosted}>
-            5 Days Ago
+            {formatPostDate(created_at)}
           </Typography>
           <Hidden xsDown>
             <div className={classes.commentContainer}>
@@ -153,7 +156,7 @@ function AuthorCaption({ user, createdAt, caption }) {
             color="textSecondary"
             variant="caption"
           >
-            {createdAt}
+            {formatDateToNowShort(createdAt)}
           </Typography>
         </Link>
       </div>
@@ -192,7 +195,7 @@ function UserComment({ comment }) {
             color="textSecondary"
             variant="caption"
           >
-            {comment.created_at}
+            {formatDateToNowShort(comment.created_at)}
           </Typography>
         </Link>
       </div>
@@ -214,7 +217,7 @@ function LikeButton({ likes, authorId, postId }) {
   const variables = {
     postId,
     userId: currentUserId,
-    // profileId:
+    profileId: authorId,
   };
 
   function handleLike() {
@@ -271,6 +274,7 @@ function Comment({ postId }) {
       userId: currentUserId,
     };
     createComment({ variables });
+    setContent("");
   };
 
   return (
